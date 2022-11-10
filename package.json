@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "test": "NODE_OPTIONS=--experimental-vm-modules vitest",
+    "test:run": "NODE_OPTIONS=--experimental-vm-modules vitest run",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -w -p tsconfig.json",
