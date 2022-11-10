@@ -1,5 +1,8 @@
 import { PluginBuild, BuildResult, OnResolveResult } from "esbuild/lib/main.d";
-import { sourceDirectories } from "./composers.mjs";
+import { CopyFilesRecursively } from "./recursiveCopy.mjs";
+
+import fs from "node:fs";
+import path from "node:path";
 
 export interface Options {
   resolveFrom: "cwd" | string;
@@ -11,6 +14,12 @@ export interface Options {
   }>;
 }
 
+const isGlob = (_path: string) => {
+  const { dir } = path.parse(_path);
+
+  return dir.endsWith("/**");
+};
+
 export const justCopy = (options: Options) => {
   const {
     resolveFrom = "cwd",
@@ -19,7 +28,7 @@ export const justCopy = (options: Options) => {
     },
   } = options;
 
-  const errors: { text: string; }[] = [];
+  const errors: { text: string }[] = [];
   const from = options.assets[0].from[0];
   const to = options.assets[0].to[0];
 
@@ -38,9 +47,32 @@ export const justCopy = (options: Options) => {
         }
 
         // if the path is globbed
-        const sourceDirs = sourceDirectories(from);
-        console.log(sourceDirs);
+        if (isGlob(from)) {
+          CopyFilesRecursively(from.replace(`/**/*`, ""), to);
+        } else {
+          // copy a single file
+          try {
+            if (!fs.statSync(from).isFile()) {
+              errors.push({ text: `${from} is not a file` });
+              return { errors };
+            }
+          } catch (err) {
+            if (err instanceof Error) {
+              errors.push({ text: err.message });
+              return { errors };
+            }
+          }
 
+          try {
+            fs.mkdirSync(path.dirname(to), { recursive: true });
+            fs.copyFileSync(from, to);
+          } catch (err) {
+            if (err instanceof Error) {
+              errors.push({ text: err.message });
+              return { errors };
+            }
+          }
+        }
         return { errors };
       });
 
