@@ -1,11 +1,5 @@
 import { PluginBuild, BuildResult, OnResolveResult } from "esbuild/lib/main.d";
 
-export const hello = (message: string): string => {
-  const str = `message is ${message}`;
-  console.log(str);
-  return str;
-};
-
 export interface Options {
   resolveFrom: "cwd" | string;
   assets: Array<{
@@ -36,7 +30,6 @@ export const justCopy = (options: Options) => {
     name: "just-copy",
     setup(build: PluginBuild) {
       build.onStart(async (): Promise<OnResolveResult> => {
-        hello("This is just-copy");
         if (/\/$/.test(from)) {
           errors.push({ text: "`from` must not end with `/`" });
         } else if (/\/$/.test(to)) {
