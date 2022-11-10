@@ -1,4 +1,5 @@
 import { PluginBuild, BuildResult, OnResolveResult } from "esbuild/lib/main.d";
+import { sourceDirectories } from "./composers.mjs";
 
 export interface Options {
   resolveFrom: "cwd" | string;
@@ -35,6 +36,11 @@ export const justCopy = (options: Options) => {
         } else if (/\/$/.test(to)) {
           errors.push({ text: "`to` must not end with `/`" });
         }
+
+        // if the path is globbed
+        const sourceDirs = sourceDirectories(from);
+        console.log(sourceDirs);
+
         return { errors };
       });
 
