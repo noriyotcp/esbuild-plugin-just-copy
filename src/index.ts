@@ -5,6 +5,7 @@ import path from "node:path";
 
 export interface Options {
   resolveFrom: "cwd" | string;
+  verbose: boolean;
   assets: Array<{
     [key: number]: string;
     from: Array<string>;
@@ -91,9 +92,11 @@ export const justCopy = (options: Options) => {
         }
       });
 
-      build.onEnd((result: BuildResult) => {
-        console.log(`Build completed ${JSON.stringify(result)}`);
-      });
+      if (options.verbose) {
+        build.onEnd((result: BuildResult) => {
+          console.log(`Build completed ${JSON.stringify(result)}`);
+        });
+      }
     },
   };
 };
