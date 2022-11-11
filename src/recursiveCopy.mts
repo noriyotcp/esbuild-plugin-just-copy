@@ -19,28 +19,4 @@ const getFilelistRecursively = (targetpath: fs.PathLike) => {
   return result;
 };
 
-/**
- * Recursively copies folders and files under the specified path with the same structure.
- * If the destination directory does not exist, a folder will be created and copied into it.
- * In case of insufficient permissions or insufficient capacity, it will detect an exception and stop.
- * @param {string} srcpath copy from the path
- * @param {string} destpath copy to the path
- */
-const CopyFilesRecursively = (srcpath: string, destpath: fs.PathLike) => {
-  if (!fs.existsSync(destpath)) {
-    fs.mkdirSync(destpath, { recursive: true });
-  }
-  const targetList = getFilelistRecursively(srcpath);
-  targetList.forEach((node) => {
-    const newpath = destpath + node.path.substring(srcpath.length);
-    if (node.isDir) {
-      if (!fs.existsSync(destpath)) fs.mkdirSync(newpath);
-    } else {
-      fs.copyFile(node.path, newpath, (err) => {
-        if (err) throw err;
-      });
-    }
-  });
-};
-
-export { CopyFilesRecursively };
+export { getFilelistRecursively };
