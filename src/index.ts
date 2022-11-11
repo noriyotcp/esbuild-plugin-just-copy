@@ -1,5 +1,5 @@
 import { PluginBuild, BuildResult, OnResolveResult } from "esbuild/lib/main.d";
-import { getFilelistRecursively } from "./recursiveCopy.mjs";
+import { getFilelistRecursively } from "./lib/getFilelistRecursively.mjs";
 
 import fs from "node:fs";
 import path from "node:path";
