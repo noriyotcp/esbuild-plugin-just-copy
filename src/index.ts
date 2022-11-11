@@ -20,30 +20,6 @@ const isGlob = (_path: string) => {
   return dir.endsWith("/**");
 };
 
-/**
- * Recursively copies folders and files under the specified path with the same structure.
- * If the destination directory does not exist, a folder will be created and copied into it.
- * In case of insufficient permissions or insufficient capacity, it will detect an exception and stop.
- * @param {string} srcpath copy from the path
- * @param {string} destpath copy to the path
- */
-const CopyFilesRecursively = (srcpath: string, destpath: fs.PathLike) => {
-  if (!fs.existsSync(destpath)) {
-    fs.mkdirSync(destpath, { recursive: true });
-  }
-  const targetList = getFilelistRecursively(srcpath);
-  targetList.forEach((node) => {
-    const newpath = destpath + node.path.substring(srcpath.length);
-    if (node.isDir) {
-      if (!fs.existsSync(destpath)) fs.mkdirSync(newpath);
-    } else {
-      fs.copyFile(node.path, newpath, (err) => {
-        if (err) throw err;
-      });
-    }
-  });
-};
-
 export const justCopy = (options: Options) => {
   const errors: { text: string }[] = [];
 
@@ -63,7 +39,22 @@ export const justCopy = (options: Options) => {
           }
           // if the path is globbed
           if (isGlob(from)) {
-            CopyFilesRecursively(from.replace(`/**/*`, ""), to);
+            const fromDir = from.replace(`/**/*`, "");
+
+            if (!fs.existsSync(to)) {
+              fs.mkdirSync(to, { recursive: true });
+            }
+            const targetList = getFilelistRecursively(fromDir);
+            targetList.forEach((node) => {
+              const newpath = to + node.path.substring(fromDir.length);
+              if (node.isDir) {
+                if (!fs.existsSync(to)) fs.mkdirSync(newpath);
+              } else {
+                fs.copyFile(node.path, newpath, (err) => {
+                  if (err) throw err;
+                });
+              }
+            });
           } else {
             // copy a single file
             try {
