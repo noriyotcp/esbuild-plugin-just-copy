@@ -39,11 +39,11 @@ const getFilelistRecursively = (targetpath: fs.PathLike) => {
   return result;
 };
 
-export const justCopy = (options: Options) => {
+export const copy = (options: Options) => {
   const errors: { text: string }[] = [];
 
   return {
-    name: "just-copy",
+    name: "copy",
     setup(build: PluginBuild) {
       build.onStart(async (): Promise<OnResolveResult> => {
         try {
