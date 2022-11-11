@@ -22,7 +22,7 @@ const isGlob = (_path: string) => {
 /**
  * serach files and directories recursively.
  * @param {string} targetpath search base path
- * @returns list of { path:absolute path, isDir:is directory } of files and dirs in targetpath
+ * @returns list of { path:is path, isDir:is directory } of files and dirs in targetpath
  */
 const getFilelistRecursively = (targetpath: fs.PathLike) => {
   let result: { path: string; isDir: boolean }[] = [];
@@ -40,8 +40,6 @@ const getFilelistRecursively = (targetpath: fs.PathLike) => {
 
 export const justCopy = (options: Options) => {
   const errors: { text: string }[] = [];
-
-  console.log(options);
 
   return {
     name: "just-copy",
