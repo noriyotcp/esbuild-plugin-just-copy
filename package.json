@@ -1,6 +1,6 @@
 {
   "name": "esbuild-plugin-just-copy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ESBuild plugin for assets copy.",
   "keywords": ["esbuild", "ESBuild", "copy", "plugin"],
   "homepage": "https://github.com/noriyotcp/esbuild-plugin-just-copy",
