@@ -4,13 +4,13 @@ import fs from "node:fs";
 import path from "node:path";
 
 export interface Options {
-  resolveFrom: "cwd" | string; // this is not working now
-  verbose: boolean;
+  resolveFrom?: "cwd" | string; // this is not working now
+  verbose?: boolean;
   assets: Array<{
     [key: number]: string;
     from: Array<string>;
     to: Array<string>;
-    keepStructure: boolean; // this is not working now
+    keepStructure?: boolean; // this is not working now
   }>;
 }
 
