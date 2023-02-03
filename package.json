@@ -25,6 +25,7 @@
     "build:watch": "tsc -w -p tsconfig.json",
     "clean": "rm -rf dist build",
     "prepare": "npm run build",
+    "test": "vitest",
     "ts-node": "node --loader ts-node/esm"
   },
   "author": "Noriyo Akita <noriyo.akita@gmail.com> (https://github.com/noriyotcp)",
