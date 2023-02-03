@@ -6,23 +6,29 @@ import { copy } from "./index";
 
 it("copy", async () => {
   const tmpDir = path.join(__dirname, "..", "assets");
-  fs.mkdirSync(tmpDir);
+  const from = [path.resolve(__dirname, "./index.ts")];
+  const to = [path.join(tmpDir, "index.ts")];
 
-  const spy = vi.spyOn(fs, "copyFileSync");
+  const copyFileSyncSpy = vi.spyOn(fs, "copyFileSync");
+  const mkdirSyncSpy = vi.spyOn(fs, "mkdirSync");
   await build({
     plugins: [
       copy({
         assets: [
           {
-            from: [path.resolve(__dirname, './index.ts')],
-            to: [path.join(tmpDir, 'index.ts')],
+            from,
+            to,
           },
         ],
       }),
     ],
   });
-  expect(spy).toHaveBeenCalled();
+  expect(copyFileSyncSpy).toHaveBeenCalledWith(
+    from[0],
+    to[0]
+  );
+  expect(mkdirSyncSpy).toHaveBeenCalledWith(tmpDir, { recursive: true });
 
-  fs.unlinkSync(path.join(tmpDir, "index.ts"));
+  fs.unlinkSync(to[0]);
   fs.rmdirSync(tmpDir);
 });
